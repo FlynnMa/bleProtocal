@@ -63,7 +63,6 @@ Java_com_vehicle_uart_DevMaster_getPackage(
     const unsigned char sendBytes[] = {10,11,12,13,14};
     sendDataTypes *pData;
 
-    LOGD("get package");
     if(0 != listGetAt(&sendBuffer, 0, (uint32_t*)&pData))
     {
         return NULL;
@@ -360,21 +359,6 @@ Java_com_vehicle_uart_DevMaster_getConnection(
     protocalApiQuery(CMD_ID_DEVICE_CONNECTION, NULL, 0);
 }
 
-void* jni_testmain(void *param)
-{
-    EventType evt;
-    int ret;
-
-    memset(&evt, 0, sizeof(evt));
-    while(1 == jniCtl.isRunning)
-    {
-        ret = write(jniCtl.writePip, &evt, sizeof(EventType));
-        evt.event ++;
-        devInfo.version[0]++;
-        sleep(100);
-    }
-}
-
 void jni_send_event(int evtID, int evtType)
 {
     EventType evt;
@@ -383,26 +367,6 @@ void jni_send_event(int evtID, int evtType)
     evt.event = evtID;
     evt.evtType = evtType;
     write(jniCtl.writePip, &evt, sizeof(EventType));
-}
-
-JNIEXPORT void JNICALL
-Java_com_vehicle_uart_DevMaster_startThread(
-        JNIEnv *env, jobject obj)
-{
-    pthread_t ppid;
-    int ret = 0;
-
-    if (jniCtl.isRunning == 1)
-    {
-        return;
-    }
-
-    jniCtl.isRunning = 1;
-    ret = pthread_create(&ppid, NULL, jni_testmain, NULL);
-    if (ret)
-    {
-        PERR("start fusion thread:%d", ret);
-    }
 }
 
 JNIEXPORT void JNICALL
@@ -430,25 +394,7 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
     bicProcessInit();
 
     strcpy(devInfo.name, "BIC technology");
-    devInfo.version[0] = 1;
-    devInfo.version[1] = 6;
-    devInfo.version[2] = 5;
-    devInfo.version[3] = 4;
     strcpy(devInfo.copyRight, "copy right");
-    devInfo.deviceID = 2005; /*TODO: temperate debug use */
-    devInfo.mile = 3000;
-    devInfo.powerOnOff = 1;
-    devInfo.chargerIn = 1;
-    devInfo.driveMode = 3;
-    devInfo.connection = 0;
-    devInfo.speed = 13.14;
-    devInfo.maxSpeed = 25.56;
-    devInfo.voltage  = 42.23;
-    devInfo.maxVoltage = 44.44;
-    devInfo.minVoltage = 38.78;
-    devInfo.shutdownVoltage = 38.11;
-    devInfo.fullVoltage = 44.44;
-    devInfo.mainboardTemperiture = 29.23;
     /* success -- return valid version number */
     result = JNI_VERSION_1_4;
 
@@ -461,10 +407,8 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
         return ret;
     }
     jniCtl.readPip = pip[0];
-    devInfo.connection = jniCtl.readPip; /*TODO: temperate debug use */
     fcntl(jniCtl.readPip, F_SETFL, 0);
     jniCtl.writePip = pip[1];
-    devInfo.deviceID = 2016; /*TODO: temperate debug use */
 
     return result;
 }

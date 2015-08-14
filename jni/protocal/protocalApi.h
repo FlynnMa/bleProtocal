@@ -14,7 +14,7 @@
 
 typedef enum DeviceType {
     DEVICE_TYPE_BT = 1,
-    DEVICE_TYPE_EV // electronic vehicle device
+    DEVICE_TYPE_EV = 2// electronic vehicle device
 } DeviceType;
 
 

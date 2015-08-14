@@ -202,6 +202,7 @@ int32_t bicProcessCmd(uint8_t cmdType,
  */
 void bicProcessAck(uint8_t cmd, uint8_t result)
 {
+    PERR("ack %d, result:%d", cmd, result);
     if (result == ERROR_CHECKSUM)
     {
         protocalApiResendLastPackage();

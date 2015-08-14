@@ -70,6 +70,21 @@
 
 #define CMD_ID_DRIVE_MODE                     13 /**< 1 byte drive mode */
 
+#define CMD_ID_CURRENT                        14 /**< 4 bytes int32 value in mA*/
+
+#define CMD_ID_PERIOD_MILE                    15 /**< 4 bytes int32 value in ms
+                                        this defines update rate of miles data
+                                        range 200 ~ 1000 */
+
+#define CMD_ID_PERIOD_BATTERY_LONG            16 /**< 4 bytes int32 value in ms
+                                        this defines long battery query period
+                                        which is used for detecting voltage
+                                        and temperature, range > 1000*/
+
+#define CMD_ID_PERIOD_BATTERY_SHORT           17 /**< 4 bytes int32 value in ms
+                                        this defines short battery query period
+                                        which is used for detecting running
+                                        current, range 200 ~ 1000*/
 
 #ifdef __cplusplus
 extern "C" {
