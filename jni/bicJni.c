@@ -52,6 +52,8 @@ Java_com_vehicle_uart_DevMaster_onDataRecv(
 //        LOGD("recv char:%d", ch[i]);
         bicReceiveChar(ch[i]);
     }
+
+    (*env)->ReleaseByteArrayElements(env, jData, m_temp, JNI_FALSE);
 }
 
 JNIEXPORT jbyteArray JNICALL
@@ -60,7 +62,6 @@ Java_com_vehicle_uart_DevMaster_getPackage(
 {
     // Array to fill with data
     jbyteArray *package;
-    const unsigned char sendBytes[] = {10,11,12,13,14};
     sendDataTypes *pData;
 
     if(0 != listGetAt(&sendBuffer, 0, (uint32_t*)&pData))
@@ -93,6 +94,7 @@ Java_com_vehicle_uart_DevMaster_update(
     jfieldID nameID = (*env)->GetFieldID(env, cls,"name", "Ljava/lang/String;");
     jstring nameObj = (*env)->NewStringUTF(env, devInfo.name);
    (*env)->SetObjectField(env, obj, nameID, nameObj);
+   (*env)->DeleteLocalRef(env, nameObj);
 
     jfieldID versionID = (*env)->GetFieldID(env, cls, "version", "[B");
     jbyteArray versionObj = (*env)->GetObjectField(env, obj, versionID);
@@ -147,6 +149,9 @@ Java_com_vehicle_uart_DevMaster_update(
     jfieldID fullVoltageID = (*env)->GetFieldID(env, cls,"fullVoltage","F");
     (*env)->SetFloatField(env, obj, fullVoltageID,devInfo.fullVoltage);
 
+    jfieldID currentID = (*env)->GetFieldID(env, cls,"current","F");
+    (*env)->SetFloatField(env, obj, currentID, devInfo.current);
+
     jfieldID mainboardTemperitureID = (*env)->GetFieldID(env,
                     cls,"mainboardTemperiture","F");
     (*env)->SetFloatField(env, obj, mainboardTemperitureID,
@@ -162,7 +167,7 @@ Java_com_vehicle_uart_DevMaster_readEvent(JNIEnv *env,
     EventType evt;
 
     ret = read(jniCtl.readPip, &evt, sizeof(EventType));
-    PERR("jni read event:%d - %d", evt.event, evt.evtType);
+    PWARN("jni read event:%d - %d", evt.event, evt.evtType);
 
      /* Create a corresponding file descriptor */
      jclass cls = (*env)->GetObjectClass(env, obj);
@@ -179,7 +184,7 @@ JNIEXPORT void JNICALL
     Java_com_vehicle_uart_DevMaster_query(
             JNIEnv *env, jobject obj, jint cmdID, jint dev)
 {
-        LOGD("query cmd:%d from device:%d", cmdID, dev);
+        PWARN("query cmd:%d from device:%d", cmdID, dev);
         protocalApiSetDevice(dev);
         protocalApiQuery(cmdID, NULL, 0);
 }
@@ -188,7 +193,7 @@ JNIEXPORT void JNICALL
     Java_com_vehicle_uart_DevMaster_setInt(
             JNIEnv *env, jobject obj, jint cmdID, jint dev, jint data)
 {
-    LOGD("query power on or off");
+    LOGW("set byte :%d", (uint8_t)data);
     protocalApiSetDevice(dev);
     protocalApiSetU8(cmdID, (uint8_t)data);
 }
@@ -393,7 +398,7 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
 
     bicProcessInit();
 
-    strcpy(devInfo.name, "BIC technology");
+    strcpy(devInfo.name, "shGeek technology");
     strcpy(devInfo.copyRight, "copy right");
     /* success -- return valid version number */
     result = JNI_VERSION_1_4;

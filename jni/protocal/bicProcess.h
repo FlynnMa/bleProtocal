@@ -72,19 +72,32 @@
 
 #define CMD_ID_CURRENT                        14 /**< 4 bytes int32 value in mA*/
 
-#define CMD_ID_PERIOD_MILE                    15 /**< 4 bytes int32 value in ms
-                                        this defines update rate of miles data
-                                        range 200 ~ 1000 */
+#define CMD_ID_PERIOD_LONG                    15 /**< 4 bytes int32 value in ms
+                                      this defines update rate of long period
+                                      range 1000 ~ 10000 */
 
-#define CMD_ID_PERIOD_BATTERY_LONG            16 /**< 4 bytes int32 value in ms
-                                        this defines long battery query period
-                                        which is used for detecting voltage
-                                        and temperature, range > 1000*/
+#define CMD_ID_PERIOD_SHORT                    16 /**< 4 bytes int32 value in ms
+                                      this defines update rate of short period
+                                      range 200 ~ 1000 */
 
-#define CMD_ID_PERIOD_BATTERY_SHORT           17 /**< 4 bytes int32 value in ms
-                                        this defines short battery query period
-                                        which is used for detecting running
-                                        current, range 200 ~ 1000*/
+#define CMD_ID_GENERAL_LONG            17  /**< a combined command, contains
+                                      battery, temperature, charge status */
+
+#define CMD_ID_GENERAL_SHORT           18 /**< a combined command queried in short
+                                      duration, contains speed, current, mile */
+
+
+typedef struct GeneralInfoLongType {
+    float    battery;
+    float    temperature;
+    int32_t  incharge;
+} GeneralInfoL;
+
+typedef struct GeneralInfoShortType {
+    uint32_t mile;
+    float speed;
+    float    current;
+} GeneralInfoS;
 
 #ifdef __cplusplus
 extern "C" {

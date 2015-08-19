@@ -24,6 +24,7 @@ typedef struct DeviceInfoType {
     float       shutdownVoltage;
     float       fullVoltage;
     float       mainboardTemperiture;
+    float       current;
 
    /* write section, data will write to device */
     char       ApkVersion[4];

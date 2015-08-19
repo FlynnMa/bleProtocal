@@ -42,7 +42,7 @@
 
 /*! max event number in stack
  */
-#define PROTOCAL_MAX_EVENT_NUM                 3
+#define PROTOCAL_MAX_EVENT_NUM                 100
 
 /*!
  * header size

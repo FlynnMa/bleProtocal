@@ -44,6 +44,8 @@ int bicProcessInit(void)
 static int32_t onSet(uint8_t cmd, uint8_t *pData,
     uint8_t len)
 {
+    GeneralInfoL *pInfoL;
+    GeneralInfoS *pInfoS;
     switch(cmd)
     {
         case CMD_ID_DEVICE_ID:
@@ -111,6 +113,20 @@ static int32_t onSet(uint8_t cmd, uint8_t *pData,
 
         case CMD_ID_DEVICE_CONNECTION:
             devInfo.connection = (int)(*pData);
+            break;
+
+        case CMD_ID_GENERAL_SHORT:
+            pInfoS = (GeneralInfoS*)pData;
+            devInfo.mile = pInfoS->mile;
+            devInfo.current = pInfoS->current;
+            devInfo.speed = pInfoS->speed;
+            break;
+
+        case CMD_ID_GENERAL_LONG:
+            pInfoL = (GeneralInfoL*)pData;
+            devInfo.voltage = pInfoL->battery;
+            devInfo.mainboardTemperiture = pInfoL->temperature;
+            devInfo.chargerIn = pInfoL->incharge;
             break;
 
         default:
