@@ -42,7 +42,6 @@ int32_t protocalInit(ProtocalStatusType *pProtocal)
  */
 void protocalSetDevice(ProtocalStatusType *pProtocal, uint8_t devID)
 {
-    LOGD("set device:%d", devID);
     pProtocal->sendDevice = devID;
 }
 

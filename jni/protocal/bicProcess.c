@@ -186,7 +186,7 @@ int32_t bicProcessCmd(uint8_t cmdType,
 {
     uint32_t ret = 0;
 
-    PERR("type:%d, cmd:%d, len:%d", cmdType, cmd, len);
+//    PERR("type:%d, cmd:%d, len:%d", cmdType, cmd, len);
     switch(cmdType)
     {
         case CMD_TYPE_ACK:

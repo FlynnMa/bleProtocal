@@ -82,6 +82,13 @@ Java_com_vehicle_uart_DevMaster_getPackage(
 }
 
 JNIEXPORT void JNICALL
+Java_com_vehicle_uart_DevMaster_init(
+        JNIEnv *env, jobject obj)
+{
+    memset(&devInfo, 0, sizeof(devInfo));
+}
+
+JNIEXPORT void JNICALL
 Java_com_vehicle_uart_DevMaster_update(
         JNIEnv *env, jobject obj)
 {
@@ -167,7 +174,7 @@ Java_com_vehicle_uart_DevMaster_readEvent(JNIEnv *env,
     EventType evt;
 
     ret = read(jniCtl.readPip, &evt, sizeof(EventType));
-    PWARN("jni read event:%d - %d", evt.event, evt.evtType);
+//    PWARN("jni read event:%d - %d", evt.event, evt.evtType);
 
      /* Create a corresponding file descriptor */
      jclass cls = (*env)->GetObjectClass(env, obj);
@@ -184,7 +191,7 @@ JNIEXPORT void JNICALL
     Java_com_vehicle_uart_DevMaster_query(
             JNIEnv *env, jobject obj, jint cmdID, jint dev)
 {
-        PWARN("query cmd:%d from device:%d", cmdID, dev);
+//        PWARN("query cmd:%d from device:%d", cmdID, dev);
         protocalApiSetDevice(dev);
         protocalApiQuery(cmdID, NULL, 0);
 }
@@ -193,7 +200,7 @@ JNIEXPORT void JNICALL
     Java_com_vehicle_uart_DevMaster_setInt(
             JNIEnv *env, jobject obj, jint cmdID, jint dev, jint data)
 {
-    LOGW("set byte :%d", (uint8_t)data);
+//    LOGW("set byte :%d", (uint8_t)data);
     protocalApiSetDevice(dev);
     protocalApiSetU8(cmdID, (uint8_t)data);
 }
@@ -368,7 +375,7 @@ void jni_send_event(int evtID, int evtType)
 {
     EventType evt;
 
-    PERR("jni send event:%d - %d", evtID, evtType);
+//    PERR("jni send event:%d - %d", evtID, evtType);
     evt.event = evtID;
     evt.evtType = evtType;
     write(jniCtl.writePip, &evt, sizeof(EventType));
